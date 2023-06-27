@@ -1525,15 +1525,16 @@ def HRTEM(
                 return_numpy=False,
                 device_type=device,
             )
-            output[:, it, ...] += (
-                amplitude(
-                    torch.fft.ifftn(
-                        ctf * crop_to_bandwidth_limit_torch(probe), dim=(-2, -1)
-                    )
-                )
-                .cpu()
-                .numpy()
-            )
+            output[it] += np.abs(np.fft.fftshift(crop_to_bandwidth_limit(probe))) ** 2
+            # output[:, it, ...] += (
+            #     amplitude(
+            #         torch.fft.ifftn(
+            #             ctf * crop_to_bandwidth_limit_torch(probe), dim=(-2, -1)
+            #         )
+            #     )
+            #     .cpu()
+            #     .numpy()
+            #)
 
     # Divide output by # of pixels to compensate for Fourier transform
     return np.squeeze(output) / nfph
