@@ -1483,6 +1483,7 @@ def HRTEM(
 
     # Convert thicknesses into number of slices for multislice
     nslices = thickness_to_slices(t_, structure.unitcell[2], subslicing, subslices)
+    print(nslices)
 
     rsize = np.asarray(structure.unitcell[:2]) * np.asarray(tiling)
 
@@ -1513,6 +1514,8 @@ def HRTEM(
         )
         # Run multislice iterating over different thickness outputs
         for it, t in enumerate(np.diff(nslices, prepend=0)):
+            print(it)
+            print(t)
             probe = multislice(
                 probe,
                 t,

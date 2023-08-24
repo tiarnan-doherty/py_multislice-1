@@ -809,6 +809,7 @@ class structure:
 
         # Now view potential as a 4D array for next bit
         P = P.view(nelements, nsubslices, *pixels_)
+        print(f'P.shape: {P.shape}')
 
         # Use real fast fourier transforms to save memory and time
         P = torch.fft.rfft2(P, s=pixels_)

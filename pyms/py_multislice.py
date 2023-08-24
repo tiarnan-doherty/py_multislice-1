@@ -244,10 +244,13 @@ def multislice(
     # Since pytorch doesn't have a complex data type we need to add an extra
     # dimension of size 2 to each tensor that will store real and imaginary
     # components.
+
     T = ensure_torch_array(transmission_functions, device=device)
     P = ensure_torch_array(propagators, dtype=T.dtype, device=device)
     psi = ensure_torch_array(probes, dtype=T.dtype, device=device)
     # sys.exit()
+    print(f'T.shape:{T.shape}')
+
 
     nT, nsubslices, nopiy, nopix = T.shape[:4]
 
@@ -256,6 +259,7 @@ def multislice(
         psi = torch.fft.ifftn(psi, dim=d_)
 
     slices = generate_slice_indices(nslices, nsubslices, subslicing)
+    print(slices)
 
     def conjugateornot(array, conjugate):
         if conjugate:
