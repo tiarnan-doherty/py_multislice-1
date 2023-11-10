@@ -259,7 +259,7 @@ def multislice(
         psi = torch.fft.ifftn(psi, dim=d_)
 
     slices = generate_slice_indices(nslices, nsubslices, subslicing)
-    print(slices)
+    print(f'slices:{slices}')
 
     def conjugateornot(array, conjugate):
         if conjugate:
@@ -311,6 +311,7 @@ def multislice(
                 )
 
         T_ = shift(shift(T[it, subslice], tiling[0], 0), tiling[1], 1)
+        print(f'subslice:{subslice}')
         # Perform multislice iteration
         if transpose or reverse:
             # Reverse multislice complex conjugates the transmission and
@@ -330,7 +331,8 @@ def multislice(
             # Standard multislice iteration - probe should start in real space
             # and finish this iteration in reciprocal space
             psi = torch.fft.fftn(psi * T_, dim=d_) * P_
-
+            plt.figure()
+            plt.imshow(np.abs(T_.detach().cpu().numpy())**2)
         # The probe can be cropped to the bandwidth limit, this removes
         # superfluous array entries in reciprocal space that are zero
         # Since the next inverse FFT will apply a factor equal to the

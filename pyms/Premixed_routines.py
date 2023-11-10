@@ -1483,7 +1483,7 @@ def HRTEM(
 
     # Convert thicknesses into number of slices for multislice
     nslices = thickness_to_slices(t_, structure.unitcell[2], subslicing, subslices)
-    print(nslices)
+    print(f'nslices:{nslices}')
 
     rsize = np.asarray(structure.unitcell[:2]) * np.asarray(tiling)
 
@@ -1505,7 +1505,8 @@ def HRTEM(
         .type(cdtype)
         .to(device)
     )
-    output = np.zeros((len(defocii), len(nslices), *bw_limit_size))
+
+    #output = np.zeros((len(defocii), len(nslices), *bw_limit_size))
 
     # Iteration over frozen phonon configurations
     for _ in tqdm(range(nfph), desc="Frozen phonon iteration", disable=tdisable):
@@ -1513,9 +1514,9 @@ def HRTEM(
             gridshape, rsize, eV, beam_tilt, tilt_units, qspace=True
         )
         # Run multislice iterating over different thickness outputs
-        for it, t in enumerate(np.diff(nslices, prepend=0)):
-            print(it)
-            print(t)
+        for it, t in enumerate(nslices):
+            print(f'it:{it}')
+            print(f't:{t}')
             probe = multislice(
                 probe,
                 t,
@@ -1891,7 +1892,7 @@ def STEM_EELS_PRISM(
         )
 
     # Make probe wavefunction vectors for scan
-    # Get kspace grid in units of inverse pixels
+    # Get kspace grid  units of inverse pixels
     ky, kx = [
         np.fft.fftfreq(gridshape[-2 + i], d=1 / gridshape[-2 + i]) for i in range(2)
     ]
